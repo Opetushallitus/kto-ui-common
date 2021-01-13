@@ -1,0 +1,12 @@
+{
+  "name": "kto-ui-common",
+  "version": "1.0.0",
+  "description": "Kouta-ui ja Konfo-ui yhteisiä resursseja",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Opetushallitus/kto-ui-common.git"
+  },
+  "homepage": "https://github.com/Opetushallitus/kto-ui-common#readme",
+  "bin": { "update-mocks" : "./scripts/update-mocks.js" }
+}
