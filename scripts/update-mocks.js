@@ -14,11 +14,13 @@ const client = axios.create({
   headers: { 'Caller-Id': process.env.CALLER_ID || 'update-mocks' },
 });
 
-const mockPath = path.resolve(process.argv?.[2] ?? '.');
+const MOCKS_ROOT = (process.env.MOCKS_ROOT || 'cypress/mocks') + '/';
+
+const mockGlob = process.argv?.[2] ?? '**/*.json';
 
 (async () => {
   try {
-    const files = await globP(mockPath + '/**/*.json');
+    const files = await globP(MOCKS_ROOT + mockGlob);
     for (const fileName of files) {
       const data = await fs.readFile(fileName, 'utf8');
       const mockData = JSON.parse(data);
