@@ -7,6 +7,5 @@
     "type": "git",
     "url": "git+https://github.com/Opetushallitus/kto-ui-common.git"
   },
-  "homepage": "https://github.com/Opetushallitus/kto-ui-common#readme",
-  "bin": { "update-mocks" : "./scripts/update-mocks.js" }
+  "homepage": "https://github.com/Opetushallitus/kto-ui-common#readme"
 }
