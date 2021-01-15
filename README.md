@@ -64,7 +64,7 @@ Mock-tiedostot, joiden tiedostonimi alkaa merkkijonolla "test" voi päivittää 
 node ./scripts/update-mocks.js "test*"
 ```
 
-## Mock-tiedostojen käyttäminen cypress-testeissä
+### Mock-tiedostojen käyttäminen cypress-testeissä
 
 Mock-tiedoston määrittelyt voi ottaa käyttöön cypress-testissä [playMockFile](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js#L7)-funktiolla:
 
