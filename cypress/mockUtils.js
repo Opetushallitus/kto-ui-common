@@ -7,10 +7,12 @@ const MOCKS_ROOT = process.env.MOCKS_ROOT || 'cypress/mocks';
 export const playMockFile = fileName => {
   cy.readFile(path.join(MOCKS_ROOT, fileName), {log: true}).then(data => {
     data.forEach(({ url, method = 'GET', body, response }) => {
-      // cy.intercept doesn't notice url hash, so let's cut it out. 
-      cy.intercept(method, url.split('#')[0], req => {
-        // Check that body matches the one from mock if defined
-        if (body === undefined || isEqual(body, req.body)) {
+      // cy.intercept doesn't match urls with hash, so let's cut it out. 
+      const matchUrl = url.split('#')[0];
+      cy.intercept(method, matchUrl, req => {
+        // Check that the url match is exact (otherwise urls are partially matched) 
+        // and that body matches the one from mock if defined
+        if (matchUrl === req.url && (body === undefined || isEqual(body, req.body))) {
           req.reply({
             statusCode: response.status, 
             body: response.body
