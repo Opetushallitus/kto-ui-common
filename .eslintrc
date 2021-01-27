@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "esnext",
+        "esnext/style-guide",
+        "node",
+        "node/style-guide",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": [
+        "prettier",
+        "cypress"
+    ],
+    "env": {
+        "cypress/globals": true
+    },
+    "rules": {
+        "prettier/prettier": "warn"
+    }
+}
