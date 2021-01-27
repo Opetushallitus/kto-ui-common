@@ -1,10 +1,12 @@
-const fs = require('fs').promises;
-const https = require('https');
-const path = require('path');
-const glob = require('glob');
-const axios = require('axios');
-const { promisify } = require('util');
+import axios from 'axios';
+import fs from 'fs';
+import glob from 'glob';
+import https from 'https';
+import { promisify } from 'util';
+
 const globP = promisify(glob);
+
+const fsP = fs.promises;
 
 const client = axios.create({
   httpsAgent: new https.Agent({
@@ -14,7 +16,7 @@ const client = axios.create({
   headers: { 'Caller-Id': process.env.CALLER_ID || 'update-mocks' },
 });
 
-const MOCKS_ROOT = (process.env.MOCKS_ROOT || 'cypress/mocks') + '/';
+const MOCKS_ROOT = (process.env.MOCKS_ROOT || 'cypress/mocks') + '/';
 
 const mockGlob = process.argv?.[2] ?? '**/*.json';
 
@@ -22,12 +24,12 @@ const mockGlob = process.argv?.[2] ?? '**/*.json';
   try {
     const files = await globP(MOCKS_ROOT + mockGlob);
     for (const fileName of files) {
-      const data = await fs.readFile(fileName, 'utf8');
+      const data = await fsP.readFile(fileName, 'utf8');
       const mockData = JSON.parse(data);
       console.log(`Mock file ${fileName} read`);
       if (Array.isArray(mockData)) {
         const updatedMockData = await Promise.all(
-          mockData?.map(async mock => {
+          mockData?.map(async (mock) => {
             let res;
             try {
               console.log(`Requesting url ${mock.url}`);
@@ -49,7 +51,7 @@ const mockGlob = process.argv?.[2] ?? '**/*.json';
             };
           })
         );
-        await fs.writeFile(
+        await fsP.writeFile(
           fileName,
           JSON.stringify(updatedMockData, null, 2),
           'utf8'
