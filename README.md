@@ -6,7 +6,7 @@ kouta-ui ja konfo-ui yhteisiä resursseja
 KTO-projektissa on toteutettu omat työkalut API-kutsujen mockauksen helpottamiseen. Työkalut koostuvat kolmesta erillisestä osasta.
 
 - [update-mocks.js](https://github.com/Opetushallitus/kto-ui-common/blob/main/scripts/update-mocks.js) node.js skripti, joka käy läpi JSON-muotoiset mock-tiedostot, kutsuu niissä määriteltyjä HTTP-pyyntöjä ja päivittää vastaukset kyseisiin tiedostoihin.
-- [playMockFile](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js#L7) cypress-apufunktio, joka käy läpi mock-tiedoston määrittelyt ja ottaa ne käyttöön cypress-testissä. 
+- [playMocks ja playMockFile](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js) cypress-apufunktiot, jotka käyvät läpi mock-määrittelyt ja ottavat ne käyttöön cypress-testissä. `playMocks` ottaa parametrina JS-objektin ja `playMockFile` tiedoston nimen.
 - [recordMockFileTemplate](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js#L26) cypress-apufunktio, jonka avulla voi cypress-testissä nauhoittaa tiedostoon kaikki cypress-testitiedostossa tehdyt kutsut mock-tiedoston pohjaksi.
 
 Työkalut olettavat mock-tiedostojen hakemistoksi `cypress/mocks` projektin juurihakemistossa. Polkua voi vaihtaa asettamalla ympäristömuuttujan `MOCKS_ROOT`.
@@ -36,7 +36,7 @@ Mock-tiedostojen formaatti on seuraavanlainen:
     // Lisää vastaavanlaisia objekteja
 ]
 ```
-Pakolliset kentät yksittäisille määrittelyille ovat `url` ja `response`. Uusia mock-tiedostoja voi luoda kirjoittamalla käsin määrittelyn mukaisia tiedostoja, joissa ei ole `response`-osia ja kutsumalla `update-mocks.js`-skriptiä. Tällaisten "mock-pohjien" voi myös luoda [recordMockFileTemplate](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js#L26)-funktiola kutsumalla sitä cypress-testistä:
+Pakolliset kentät yksittäisille määrittelyille ovat `url` ja `response`. Uusia mock-tiedostoja voi luoda kirjoittamalla käsin määrittelyn mukaisia tiedostoja, joissa ei ole `response`-osia ja kutsumalla `update-mocks.js`-skriptiä. Tällaisia "mock-pohjia" voi myös luoda [recordMockFileTemplate](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js#L26)-funktiola kutsumalla sitä cypress-testistä:
 
 ```js
 describe('testsuite', () => {
@@ -48,7 +48,7 @@ describe('testsuite', () => {
 });
 ```
 
-Luotu mock-pohja (template) todennäköisesti sisältää liikaa pyyntöjä, joten sitä kannattaa siistiä ennen kuin sen "päivittää" `update-mocks`-skriptillä.
+Luotu mock-pohja (template) todennäköisesti sisältää liikaa pyyntöjä, joten sitä kannattaa siistiä ennen kuin sen "päivittää" [update-mocks.js](https://github.com/Opetushallitus/kto-ui-common/blob/main/scripts/update-mocks.js)-skriptillä.
 
 ### Mock-tiedostojen päivitys (update-mocks.js)
 
@@ -66,7 +66,26 @@ node ./scripts/update-mocks.js "test*"
 
 ### Mock-tiedostojen käyttäminen cypress-testeissä
 
-Mock-tiedoston määrittelyt voi ottaa käyttöön cypress-testissä [playMockFile](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js#L7)-funktiolla:
+Mock-tiedoston määrittelyt voi ottaa käyttöön cypress-testissä kahdella eri tavalla.
+`playMocks` lukee mocks-tiedoston vain kerran per testitiedosto, joten se n suositeltavampi tapa.
+
+Esimerkki [playMocks](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js)-funktion käytöstä:
+
+```js
+import testMocks from '../mocks/test.mocks.json'
+
+describe('testsuite', () => {
+  beforeEach(() => {
+    playMocks(testMocks)
+  });
+  
+  it('test', () => {
+    // testikoodia...
+  });
+});
+```
+
+Esimerkki [playMockFile](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js)-funktion käytöstä:
 
 ```js
 describe('testsuite', () => {
@@ -79,3 +98,5 @@ describe('testsuite', () => {
   });
 });
 ```
+
+
