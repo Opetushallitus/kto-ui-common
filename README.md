@@ -67,7 +67,7 @@ node ./scripts/update-mocks.js "test*"
 ### Mock-tiedostojen käyttäminen cypress-testeissä
 
 Mock-tiedoston määrittelyt voi ottaa käyttöön cypress-testissä kahdella eri tavalla.
-`playMocks` lukee mocks-tiedoston vain kerran per testitiedosto, joten se n suositeltavampi tapa.
+`playMocks` lukee mocks-tiedoston vain kerran per testitiedosto, joten se on suositeltavampi tapa.
 
 Esimerkki [playMocks](https://github.com/Opetushallitus/kto-ui-common/blob/main/cypress/mockUtils.js)-funktion käytöstä:
 
